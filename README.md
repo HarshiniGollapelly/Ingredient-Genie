@@ -37,7 +37,7 @@ Ingredient-Genie/
 1. Clone the repository:
 
 ```bash
-git clone https://github.com/your-username/Ingredient-Genie.git
+git clone https://github.com/HarshiniGollapelly/Ingredient-Genie.git
 ```
 
 2. Open the project folder.
