@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ingredient Genie</title>
+
+<style>
+body {
+    margin: 0;
+    padding: 40px;
+    font-family: 'Segoe UI', sans-serif;
+
+    /* OFFLINE BACKGROUND IMAGE */
+    background: url("w.jpg") no-repeat center center fixed;
+    background-size: cover;
+
+    min-height: 100vh;
+}
+
+.overlay {
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(6px);
+    border-radius: 20px;
+    padding: 35px;
+    max-width: 950px;
+    margin: auto;
+    color: white;
+}
+
+h1 {
+    text-align: center;
+    font-size: 38px;
+    color: #f39c12;
+    text-shadow: 0 0 10px rgba(243,156,18,0.7);
+}
+
+p {
+    text-align: center;
+    font-size: 18px;
+}
+
+.center-box {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-top: 20px;
+}
+
+input {
+    width: 300px;
+    padding: 12px;
+    font-size: 16px;
+    border-radius: 8px;
+    border: none;
+}
+
+button {
+    padding: 12px 18px;
+    font-size: 16px;
+    border-radius: 8px;
+    border: none;
+    background-color: #f39c12;
+    color: white;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #d35400;
+}
+
+#results {
+    margin-top: 30px;
+}
+
+.recipe {
+    background: white;
+    color: black;
+    padding: 20px;
+    border-radius: 15px;
+    margin-bottom: 25px;
+    box-shadow: 0 6px 15px rgba(0,0,0,0.3);
+}
+
+.recipe img {
+    width: 260px;
+    border-radius: 12px;
+}
+
+.instructions {
+    margin-top: 15px;
+}
+
+.step {
+    margin-bottom: 8px;
+    padding-left: 10px;
+    border-left: 4px solid #f39c12;
+}
+</style>
+</head>
+
+<body>
+
+<div class="overlay">
+    <h1>🍳 Ingredient Genie</h1>
+    <p>Enter 1 to 3 ingredients, separated by commas  
+       (e.g., <b>chicken, tomato</b>)</p>
+
+    <div class="center-box">
+        <input type="text" id="ingredient" placeholder="e.g., chicken, tomato">
+        <button onclick="searchRecipes()">Find Recipes</button>
+    </div>
+
+    <div id="results"></div>
+</div>
+
+<script>
+async function fetchMealsByIngredient(ingredient) {
+    const res = await fetch(`https://www.themealdb.com/api/json/v1/1/filter.php?i=${ingredient}`);
+    const data = await res.json();
+    return data.meals || [];
+}
+
+async function fetchMealsByCategory(category) {
+    const res = await fetch(`https://www.themealdb.com/api/json/v1/1/filter.php?c=${category}`);
+    const data = await res.json();
+    return data.meals || [];
+}
+
+function intersectMeals(lists) {
+    const map = {};
+    lists.forEach(list => {
+        list.forEach(meal => {
+            if (!map[meal.idMeal]) map[meal.idMeal] = { count: 0, meal };
+            map[meal.idMeal].count++;
+        });
+    });
+    return Object.values(map)
+        .filter(m => m.count === lists.length)
+        .map(m => m.meal);
+}
+
+async function searchRecipes() {
+    const input = document.getElementById("ingredient").value.trim();
+    const results = document.getElementById("results");
+
+    results.innerHTML = "🔍 Searching recipes...";
+
+    if (!input) {
+        results.innerHTML = "Please enter at least one ingredient.";
+        return;
+    }
+
+    const ingredients = input.split(",").map(i => i.trim()).filter(i => i);
+    if (ingredients.length > 3) {
+        results.innerHTML = "Maximum 3 ingredients allowed.";
+        return;
+    }
+
+    const allMeals = [];
+    for (const ing of ingredients) {
+        allMeals.push(await fetchMealsByIngredient(ing));
+    }
+
+    const common = intersectMeals(allMeals);
+    results.innerHTML = "";
+
+    const meals = common.length ? common : await fetchMealsByCategory("Vegetarian");
+    meals.slice(0, 5).forEach(showMeal);
+}
+
+function showMeal(meal) {
+    const results = document.getElementById("results");
+    const div = document.createElement("div");
+    div.className = "recipe";
+    div.innerHTML = `
+        <h2>${meal.strMeal}</h2>
+        <img src="${meal.strMealThumb}">
+        <br><br>
+        <button onclick="getInstructions(${meal.idMeal})">Show Instructions</button>
+        <div class="instructions" id="instr-${meal.idMeal}"></div>
+    `;
+    results.appendChild(div);
+}
+
+async function getInstructions(id) {
+    const res = await fetch(`https://www.themealdb.com/api/json/v1/1/lookup.php?i=${id}`);
+    const data = await res.json();
+    const steps = data.meals[0].strInstructions.split(/[\r\n]+/).filter(s => s);
+    const div = document.getElementById(`instr-${id}`);
+    div.innerHTML = "<h3>Instructions:</h3>";
+    steps.forEach((s,i) => {
+        div.innerHTML += `<div class="step"><b>Step ${i+1}:</b> ${s}</div>`;
+    });
+}
+</script>
+
+</body>
+</html>
