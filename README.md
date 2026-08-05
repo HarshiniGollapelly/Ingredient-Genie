@@ -48,37 +48,16 @@ No installation or server setup is required.
 
 ---
 
-## Screenshots
+##  Screenshots
 
-You can add screenshots here after uploading them.
-
-Example:
-
-```
-screenshots/
-    Homepage.png
-    Results.png
-    Instructions.png
-```
-
-Then display them using:
-
-```md
 ### Home Page
-
-![HomePage](screenshots/HomePage.png)
+![Home Page](Homepage.png)
 
 ### Recipe Results
+![Recipe Results](Results.png)
 
-![Results](screenshots/Results.png)
-
-### Instructions
-
-![Instructions](screenshots/Instructions.png)
-```
-
----
-
+### Cooking Instructions
+![Instructions](Instructions.png)
 ## API Used
 
 This project uses the MealDB API to fetch recipe information.
