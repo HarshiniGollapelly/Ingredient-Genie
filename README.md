@@ -1,4 +1,4 @@
-# 🍳 Ingredient Genie
+# Ingredient Genie
 
 Ingredient Genie is a responsive web application that helps users discover delicious recipes based on the ingredients they have. Users can enter up to three ingredients, and the application fetches matching recipes using the MealDB API. If no matching recipes are found, it suggests popular vegetarian recipes as an alternative.
 
@@ -48,24 +48,19 @@ No installation or server setup is required.
 
 ---
 
-##  Screenshots
+## Screenshots
 
 ### Home Page
+
 ![Home Page](Homepage.png)
 
 ### Recipe Results
+
 ![Recipe Results](Results.png)
 
 ### Cooking Instructions
+
 ![Instructions](Instructions.png)
-## API Used
-
-This project uses the MealDB API to fetch recipe information.
-
-https://www.themealdb.com/api.php
-
----
-
 ## Future Enhancements
 
 - Filter recipes by cuisine or category
