@@ -76,7 +76,7 @@ No installation or server setup is required.
 
 Harshini
 
-GitHub: https://github.com/your-HarshiniGollapelly
+GitHub: https://github.com/HarshiniGollapelly
 
 ---
 
