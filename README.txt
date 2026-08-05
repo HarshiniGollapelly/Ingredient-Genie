@@ -56,9 +56,9 @@ Example:
 
 ```
 screenshots/
-    home.png
-    results.png
-    instructions.png
+    Homepage.png
+    Results.png
+    Instructions.png
 ```
 
 Then display them using:
@@ -66,15 +66,15 @@ Then display them using:
 ```md
 ### Home Page
 
-![Home](screenshots/home.png)
+![HomePage](screenshots/HomePage.png)
 
 ### Recipe Results
 
-![Results](screenshots/results.png)
+![Results](screenshots/Results.png)
 
 ### Instructions
 
-![Instructions](screenshots/instructions.png)
+![Instructions](screenshots/Instructions.png)
 ```
 
 ---
